@@ -44,6 +44,7 @@ func New(config *Configuration) *BinanceRest {
 	}
 	return b
 }
+
 func (ex *BinanceRest) GetBalance() WalletBalance {
 	//	получение времяни
 	ts := time.Now().UTC().Unix() * 1000
@@ -59,7 +60,8 @@ func (ex *BinanceRest) GetBalance() WalletBalance {
 	mac.Write([]byte(fmt.Sprintf("timestamp=%d", ts)))
 	parms += "&signature=" + hex.EncodeToString(mac.Sum(nil))
 	//	реализация метода GET
-	url := "https://api.binance.com/api/v3/account?" + parms
+	url := ex.cfg.Addr + "/api/v3/account?" + parms
+	log.Printf(url)
 	req, err := http.NewRequest("GET", url, nil)
 
 	//	код для вывода полученных данных
@@ -104,7 +106,7 @@ func (ex *BinanceRest) GetBalance() WalletBalance {
 				"Status" : "Error",
 				"Path to file" : "CCXT_BEYANG_BYBIT/spot/v3",
 				"File": "api.go",
-				"Functions" : "(ex *BinanceRest) GetBalance() (WalletBalance)",
+				"Functions" : "(ex *BinanceWS) GetBalance() (WalletBalance)",
 				"Function where err" : "json.Unmarshal",
 				"Exchange" : "Binance",
 				"Comment" : %s to WalletBalance struct,
