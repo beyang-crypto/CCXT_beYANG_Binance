@@ -21,10 +21,10 @@ const (
 )
 
 type Configuration struct {
-	Addr           string `json:"addr"`
-	ApiKey         string `json:"api_key"`
-	SecretKey      string `json:"secret_key"`
-	DebugMode      bool   `json:"debug_mode"`
+	Addr      string `json:"addr"`
+	ApiKey    string `json:"api_key"`
+	SecretKey string `json:"secret_key"`
+	DebugMode bool   `json:"debug_mode"`
 }
 
 type BinanceRest struct {
@@ -103,9 +103,9 @@ func (ex *BinanceRest) GetBalance() WalletBalance {
 		log.Printf(`
 			{
 				"Status" : "Error",
-				"Path to file" : "CCXT_BEYANG_BYBIT/spot/v3",
-				"File": "api.go",
-				"Functions" : "(ex *BinanceWS) GetBalance() (WalletBalance)",
+				"Path to file" : "CCXT_beYANG_Binance/binance/rest",
+				"File": "client.go",
+				"Functions" : "(ex *BinanceRest) GetBalance() WalletBalance ",
 				"Function where err" : "json.Unmarshal",
 				"Exchange" : "Binance",
 				"Comment" : %s to WalletBalance struct,
