@@ -24,7 +24,6 @@ type Configuration struct {
 	Addr           string `json:"addr"`
 	ApiKey         string `json:"api_key"`
 	SecretKey      string `json:"secret_key"`
-	APIKeyPassword string `json:"passphrase"`
 	DebugMode      bool   `json:"debug_mode"`
 }
 
