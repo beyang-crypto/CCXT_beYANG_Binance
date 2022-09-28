@@ -52,7 +52,26 @@ func New(config *Configuration) *BinanceWS {
 	return b
 }
 
-func (b *BinanceWS) Subscribe(channel string, coin string) {
+func (b *BinanceWS) Subscribe(args ...string) {
+	switch len(args) {
+	case 2:
+		b.Subscribe2(args[0], args[1])
+	default:
+		log.Printf(`
+			{
+				"Status" : "Error",
+				"Path to file" : "CCXT_BEYANG_Binance/binance/ws",
+				"File": "client.go",
+				"Functions" : "func (b *BinanceWS) Subscribe(args ...string) ",
+				"Exchange" : "Binance",
+				"Data" : [%v],
+				"Comment" : "Слишком много аргументов"
+			}`, args)
+		log.Fatal()
+	}
+}
+
+func (b *BinanceWS) Subscribe2(channel string, coin string) {
 	cmd := Cmd{
 		Method: "SUBSCRIBE",
 		Params: []string{coin + channel},
