@@ -16,11 +16,6 @@ func main() {
 	b := binanceWs.New(cfg)
 	b.Start()
 
-
-	//{"method":"SUBSCRIBE","params":["eth","xrp","ada","sol",
-	//"doge","matic","dot",
-	//"shib","trx","uni","avax","ltc","etc",
-	//"link","atom"],"id":1}
 	pair1 := b.GetPair("btc", "usdt")
 	pair2 := b.GetPair("eth", "usdt")
 	pair3 := b.GetPair("xrp", "usdt")
@@ -38,8 +33,6 @@ func main() {
 	pair15 := b.GetPair("atom", "usdt")
 
 	b.Subscribe(binanceWs.ChannelTicker, []string{pair1, pair2, pair3, pair4, pair5, pair6, pair7, pair8, pair9, pair10, pair11, pair12, pair13, pair14, pair15})
-
-
 
 	b.On(binanceWs.ChannelTicker, handleBookTicker)
 	b.On(binanceWs.ChannelTicker, handleBestBidPrice)
