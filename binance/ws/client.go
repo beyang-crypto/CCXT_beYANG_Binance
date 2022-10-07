@@ -6,7 +6,6 @@ import (
 	"log"
 	"sync"
 	"time"
-
 	"github.com/buger/jsonparser"      //  Для вытаскивания одного значения из файла json
 	"github.com/chuckpreslar/emission" // Эмитер необходим для удобного выполнения функции в какой-то момент
 	"github.com/goccy/go-json"         // для создания собственных json файлов и преобразования json в структуру
@@ -52,29 +51,18 @@ func New(config *Configuration) *BinanceWS {
 	return b
 }
 
-func (b *BinanceWS) Subscribe(args ...string) {
-	switch len(args) {
-	case 2:
-		b.Subscribe2(args[0], args[1])
-	default:
-		log.Printf(`
-			{
-				"Status" : "Error",
-				"Path to file" : "CCXT_BEYANG_Binance/binance/ws",
-				"File": "client.go",
-				"Functions" : "func (b *BinanceWS) Subscribe(args ...string) ",
-				"Exchange" : "Binance",
-				"Data" : [%v],
-				"Comment" : "Слишком много аргументов"
-			}`, args)
-		log.Fatal()
-	}
+func (b *BinanceWS) Subscribe(channel string, args []string) {
+	b.Subscribe2(channel, args)
 }
 
-func (b *BinanceWS) Subscribe2(channel string, coin string) {
+func (b *BinanceWS) Subscribe2(channel string, coins []string) {
+	var parms []string
+	for _, value := range coins{
+		parms = append(parms, value+channel)
+	}
 	cmd := Cmd{
 		Method: "SUBSCRIBE",
-		Params: []string{coin + channel},
+		Params: parms,
 		ID:     804218,
 	}
 	b.subscribeCmds = append(b.subscribeCmds, cmd)
