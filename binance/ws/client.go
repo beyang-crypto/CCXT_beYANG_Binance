@@ -67,7 +67,7 @@ func (b *BinanceWS) Subscribe(channel string, coins []string) {
 	}
 	b.subscribeCmds = append(b.subscribeCmds, cmd)
 	if b.cfg.DebugMode {
-		log.Printf("Создание json сообщения на подписку part 1")
+		log.Printf("STATUS: DEBUG\tСоздание json сообщения на подписку part 1 : %v", cmd)
 	}
 	b.SendCmd(cmd)
 }
@@ -118,7 +118,7 @@ func (b *BinanceWS) Send(msg string) (err error) {
 		}
 	}()
 	if b.cfg.DebugMode {
-		log.Printf("Отправка сообщения на сервер. текст сообщения:%s", msg)
+		log.Printf("STATUS: DEBUG\tОтправка сообщения на сервер. текст сообщения:%s", msg)
 	}
 
 	err = b.conn.WriteMessage(websocket.TextMessage, []byte(msg))
@@ -128,7 +128,7 @@ func (b *BinanceWS) Send(msg string) (err error) {
 // подключение к серверу и постоянное чтение приходящих ответов
 func (b *BinanceWS) Start() error {
 	if b.cfg.DebugMode {
-		log.Printf("Начало подключения к серверу")
+		log.Printf("STATUS: DEBUG\tНачало подключения к серверу")
 	}
 	b.connect()
 
@@ -226,7 +226,7 @@ func (b *BinanceWS) ping() {
 func (b *BinanceWS) messageHandler(data []byte) {
 
 	if b.cfg.DebugMode {
-		log.Printf("BinanceWs %v", string(data))
+		log.Printf("STATUS: DEBUG\tBinanceWs %v", string(data))
 	}
 
 	//	в ошибке нет необходимости, т.к. она выходит каждый раз, когда не найдет элемент

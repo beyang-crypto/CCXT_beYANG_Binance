@@ -77,7 +77,7 @@ func (ex *BinanceRest) GetBalance() interface{} {
 		log.Fatalln(err)
 	}
 	if ex.cfg.DebugMode {
-		log.Printf("BinanceWalletBalance %v", string(data))
+		log.Printf("STATUS: DEBUG\tBinanceWalletBalance %v", string(data))
 	}
 
 	// {
