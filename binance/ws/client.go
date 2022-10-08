@@ -67,7 +67,7 @@ func (b *BinanceWS) Subscribe(channel string, coins []string) {
 	}
 	b.subscribeCmds = append(b.subscribeCmds, cmd)
 	if b.cfg.DebugMode {
-		log.Printf("STATUS: DEBUG\tСоздание json сообщения на подписку part 1 : %v", cmd)
+		log.Printf("STATUS: DEBUG\tСоздание json сообщения на подписку part 1")
 	}
 	b.SendCmd(cmd)
 }
@@ -90,7 +90,7 @@ func (b *BinanceWS) SendCmd(cmd Cmd) {
 		log.Fatal()
 	}
 	if b.cfg.DebugMode {
-		log.Printf("Создание json сообщения на подписку part 2")
+		log.Printf("STATUS: DEBUG\tСоздание json сообщения на подписку part 2")
 	}
 	b.Send(string(data))
 }
@@ -116,6 +116,7 @@ func (b *BinanceWS) Send(msg string) (err error) {
 			}
 			err = errors.New(fmt.Sprintf("BinanceWs send error: %v", r))
 		}
+
 	}()
 	if b.cfg.DebugMode {
 		log.Printf("STATUS: DEBUG\tОтправка сообщения на сервер. текст сообщения:%s", msg)
@@ -253,7 +254,7 @@ func (b *BinanceWS) messageHandler(data []byte) {
 					}`, string(data), err)
 				log.Fatal()
 			}
-			b.processBookTicker("bookTicker", bookticker)
+			b.processBookTicker(bookticker.S, bookticker)
 		} else {
 			id, _ := jsonparser.GetInt(data, "id")
 			switch id {
