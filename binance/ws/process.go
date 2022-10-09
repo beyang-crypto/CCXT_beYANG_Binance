@@ -1,5 +1,5 @@
 package ws
 
-func (b *BinanceWS) processBookTicker(symbol string, data BookTicker) {
-	b.Emit(ChannelTicker, symbol, data)
+func (b *BinanceWS) processBookTicker(name string, symbol string, data BookTicker) {
+	b.Emit(ChannelTicker, name, symbol, data)
 }

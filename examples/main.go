@@ -57,10 +57,10 @@ func main() {
 	<-forever
 }
 
-func handleBookTicker(symbol string, data binanceWs.BookTicker) {
-	log.Printf("Binance Ticker  %s: %v", symbol, data)
+func handleBookTicker(name string, symbol string, data binanceWs.BookTicker) {
+	log.Printf("%s Ticker  %s: %v", name, symbol, data)
 }
 
-func handleBestBidPrice(symbol string, data binanceWs.BookTicker) {
-	log.Printf("Binance BookTicker  %s: BestBidPrice : %s", symbol, data.B)
+func handleBestBidPrice(name string, symbol string, data binanceWs.BookTicker) {
+	log.Printf("%s BookTicker  %s: BestBidPrice : %s", name, symbol, data.B)
 }

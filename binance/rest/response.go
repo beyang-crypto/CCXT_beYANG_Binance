@@ -20,7 +20,7 @@ type balance struct {
 	Locked string `json:"locked"`
 }
 
-func BinanceToWalletBalance(data interface{}) WalletBalance {
-	bt, _ := data.(WalletBalance)
-	return bt
+func BinanceToWalletBalance(data interface{}) (WalletBalance, bool) {
+	bt, ok := data.(WalletBalance)
+	return bt, ok
 }

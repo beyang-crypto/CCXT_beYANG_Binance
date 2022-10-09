@@ -67,7 +67,7 @@ func (b *BinanceWS) Subscribe(channel string, coins []string) {
 	}
 	b.subscribeCmds = append(b.subscribeCmds, cmd)
 	if b.cfg.DebugMode {
-		log.Printf("STATUS: DEBUG\tСоздание json сообщения на подписку part 1")
+		log.Printf("STATUS: DEBUG\tEXCHANGE: Binance\tAPI: WS\tСоздание json сообщения на подписку part 1")
 	}
 	b.SendCmd(cmd)
 }
@@ -90,7 +90,7 @@ func (b *BinanceWS) SendCmd(cmd Cmd) {
 		log.Fatal()
 	}
 	if b.cfg.DebugMode {
-		log.Printf("STATUS: DEBUG\tСоздание json сообщения на подписку part 2")
+		log.Printf("STATUS: DEBUG\tEXCHANGE: Binance\tAPI: WS\tСоздание json сообщения на подписку part 2")
 	}
 	b.Send(string(data))
 }
@@ -119,7 +119,7 @@ func (b *BinanceWS) Send(msg string) (err error) {
 
 	}()
 	if b.cfg.DebugMode {
-		log.Printf("STATUS: DEBUG\tОтправка сообщения на сервер. текст сообщения:%s", msg)
+		log.Printf("STATUS: DEBUG\tEXCHANGE: Binance\tAPI: WS\tОтправка сообщения на сервер. текст сообщения:%s", msg)
 	}
 
 	err = b.conn.WriteMessage(websocket.TextMessage, []byte(msg))
@@ -129,7 +129,7 @@ func (b *BinanceWS) Send(msg string) (err error) {
 // подключение к серверу и постоянное чтение приходящих ответов
 func (b *BinanceWS) Start() error {
 	if b.cfg.DebugMode {
-		log.Printf("STATUS: DEBUG\tНачало подключения к серверу")
+		log.Printf("STATUS: DEBUG\tEXCHANGE: Binance\tAPI: WS\tНачало подключения к серверу")
 	}
 	b.connect()
 
@@ -227,7 +227,7 @@ func (b *BinanceWS) ping() {
 func (b *BinanceWS) messageHandler(data []byte) {
 
 	if b.cfg.DebugMode {
-		log.Printf("STATUS: DEBUG\tBinanceWs %v", string(data))
+		log.Printf("STATUS: DEBUG\tEXCHANGE: Binance\tAPI: WS\tBinanceWs %v", string(data))
 	}
 
 	//	в ошибке нет необходимости, т.к. она выходит каждый раз, когда не найдет элемент
@@ -254,7 +254,7 @@ func (b *BinanceWS) messageHandler(data []byte) {
 					}`, string(data), err)
 				log.Fatal()
 			}
-			b.processBookTicker(bookticker.S, bookticker)
+			b.processBookTicker("Binance", bookticker.S, bookticker)
 		} else {
 			id, _ := jsonparser.GetInt(data, "id")
 			switch id {
