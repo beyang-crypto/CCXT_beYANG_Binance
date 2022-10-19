@@ -1,7 +1,7 @@
 package ws
 
 type BookTicker struct {
-	U  int    `json:"u"`
+	U  int64  `json:"u"`
 	S  string `json:"s"`
 	B  string `json:"b"`
 	B0 string `json:"B"`

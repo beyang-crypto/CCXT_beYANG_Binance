@@ -14,14 +14,6 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-const (
-	HostMainnetPublicTopics = "wss://stream.binance.com:9443/ws"
-)
-
-const (
-	ChannelTicker = "@bookTicker"
-)
-
 type Configuration struct {
 	Addr      string `json:"addr"`
 	ApiKey    string `json:"api_key"`

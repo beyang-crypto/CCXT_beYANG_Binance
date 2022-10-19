@@ -4,21 +4,20 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"strings"
 	"time"
 
-	"github.com/goccy/go-json"
+	"github.com/buger/jsonparser"
 )
 
 const (
-	RestBaseEndpoint  = "https://api.binance.com"
-	RestBaseEndpoint1 = "https://api1.binance.com"
-	RestBaseEndpoint2 = "https://api2.binance.com"
-	RestBaseEndpoint3 = "https://api3.binance.com"
+	BaseEndpoint  = "https://api.binance.com"
+	BaseEndpoint1 = "https://api1.binance.com"
+	BaseEndpoint2 = "https://api2.binance.com"
+	BaseEndpoint3 = "https://api3.binance.com"
 )
 
 type Configuration struct {
@@ -35,7 +34,7 @@ type BinanceRest struct {
 func (b *BinanceRest) GetPair(args ...string) string {
 	pair := args[0] + args[1]
 
-	return strings.ToLower(pair)
+	return strings.ToUpper(pair)
 }
 func New(config *Configuration) *BinanceRest {
 
@@ -46,76 +45,68 @@ func New(config *Configuration) *BinanceRest {
 	return b
 }
 
-func (ex *BinanceRest) GetBalance() interface{} {
-	//	получение времяни
-	ts := time.Now().UTC().Unix() * 1000
-	apiKey := ex.cfg.ApiKey
+func (ex *BinanceRest) GetSign(parm string) string {
 	secretKey := ex.cfg.SecretKey
 
+	mac := hmac.New(sha256.New, []byte(secretKey))
+	mac.Write([]byte(parm))
+	sign := hex.EncodeToString(mac.Sum(nil))
+	return sign
+}
+
+func (ex *BinanceRest) ConnWithHeader(method string, endpoint string, parms string) []byte {
+
+	apiKey := ex.cfg.ApiKey
 	client := &http.Client{
 		Timeout: time.Second * 10,
 	}
 
-	parms := fmt.Sprintf("timestamp=%d", ts)
-	mac := hmac.New(sha256.New, []byte(secretKey))
-	mac.Write([]byte(fmt.Sprintf("timestamp=%d", ts)))
-	parms += "&signature=" + hex.EncodeToString(mac.Sum(nil))
-	//	реализация метода GET
-	url := ex.cfg.Addr + "/api/v3/account?" + parms
-	log.Printf(url)
-	req, err := http.NewRequest("GET", url, nil)
+	url := ex.cfg.Addr + endpoint + "?" + parms
 
-	//	код для вывода полученных данных
-	if err != nil {
-		log.Fatalln(err)
-	}
-	//	у бинанса апи ключ надо передавать через заголовки
+	req, err := http.NewRequest(method, url, nil)
+
 	req.Header.Set("X-MBX-APIKEY", apiKey)
 	response, err := client.Do(req)
-	data, err := io.ReadAll(response.Body)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	if ex.cfg.DebugMode {
-		log.Printf("STATUS: DEBUG\tEXCHANGE: Binance\tAPI: Rest\tBinanceWalletBalance %v", string(data))
-	}
-
-	// {
-	// 	"ret_code": 0,
-	// 	"ret_msg": "",
-	// 	"ext_code": null,
-	// 	"ext_info": null,
-	// 	"result": {
-	// 		"balances": [
-	// 			{
-	// 				"coin": "USDT",
-	// 				"coinId": "USDT",
-	// 				"coinName": "USDT",
-	// 				"total": "10",
-	// 				"free": "10",
-	// 				"locked": "0"
-	// 			}
-	// 		]
-	// 	}
-	// }
-
-	var walletBalance WalletBalance
-	err = json.Unmarshal(data, &walletBalance)
 	if err != nil {
 		log.Printf(`
 			{
 				"Status" : "Error",
 				"Path to file" : "CCXT_beYANG_Binance/binance/rest",
 				"File": "client.go",
-				"Functions" : "(ex *BinanceRest) GetBalance() WalletBalance ",
-				"Function where err" : "json.Unmarshal",
+				"Functions" : "(ex *BinanceRest) withHeader(method string, endpoint string, parms string) ",
+				"Function where err" : "client.Do",
+				"Data": [%v],
 				"Exchange" : "Binance",
-				"Comment" : %s to WalletBalance struct,
 				"Error" : %s
-			}`, string(data), err)
+			}`, req, err)
 		log.Fatal()
 	}
+	data, err := io.ReadAll(response.Body)
+	if err != nil {
+		log.Printf(`
+			{
+				"Status" : "Error",
+				"Path to file" : "CCXT_beYANG_Binance/binance/rest",
+				"File": "client.go",
+				"Functions" : "(ex *BinanceRest) withHeader(method string, endpoint string, parms string) ",
+				"Function where err" : "io.ReadAll",
+				"Data": [%v],
+				"Exchange" : "Binance",
+				"Error" : %s
+			}`, response.Body, err)
+		log.Fatal()
+	}
+	if ex.cfg.DebugMode {
+		log.Printf("STATUS: DEBUG\tEXCHANGE: Binance\tAPI: Rest\tBinanceWalletBalance %v", string(data))
+	}
+	return data
+}
 
-	return walletBalance
-
+func (ex *BinanceRest) isErr(data []byte) bool {
+	code, _ := jsonparser.GetInt(data, "code")
+	if code != 0 {
+		return true
+	} else {
+		return false
+	}
 }
