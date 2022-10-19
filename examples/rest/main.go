@@ -12,8 +12,8 @@ import (
 func main() {
 	cfg := &binanceRest.Configuration{
 		Addr:      binanceRest.BaseEndpoint,
-		ApiKey:    "sJsDdkKA0MrQSethzPEyUTzwL6Ui19CtiqaBGbT8PmTcl5EDeMiY6gMqrANYGADz",
-		SecretKey: "3y1wB3mjJ0Rg8BuAor3nP8SO02oMBeyof6CqotVD2Yd9ARyWaercTBzOOkRM9p0b",
+		ApiKey:    "",
+		SecretKey: "",
 		DebugMode: false,
 	}
 
