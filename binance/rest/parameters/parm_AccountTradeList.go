@@ -3,13 +3,13 @@ package parameters
 import "fmt"
 
 type AccountTradeList struct {
-	Symbol     string `json:"symbol"`
-	OrderId    int64  `json:"orderId"`
-	StartTime  int64  `json:"startTime"`
-	EndTime    int64  `json:"endTime"`
-	FromId     int64  `json:"fromId"`
-	Limit      int64  `json:"limit"`
-	RecvWindow int64  `json:"recvWindow"`
+	Symbol     string
+	OrderId    int64
+	StartTime  int64
+	EndTime    int64
+	FromId     int64
+	Limit      int64
+	RecvWindow int64
 }
 
 func BinanceToAccountTradeListParms(data interface{}) (AccountTradeList, bool) {

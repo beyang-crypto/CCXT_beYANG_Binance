@@ -31,6 +31,8 @@ type BinanceRest struct {
 	cfg *Configuration
 }
 
+type params map[string]interface{}
+
 func (b *BinanceRest) GetPair(args ...string) string {
 	pair := args[0] + args[1]
 
@@ -98,6 +100,29 @@ func (ex *BinanceRest) ConnWithHeader(method string, endpoint string, parms stri
 	}
 	if ex.cfg.DebugMode {
 		log.Printf("STATUS: DEBUG\tEXCHANGE: Binance\tAPI: Rest\tBinanceWalletBalance %v", string(data))
+	}
+	return data
+}
+
+func (ex *BinanceRest) ConnWithoutHeader(endpoint string, parms string) []byte {
+	url := ex.cfg.Addr + endpoint + "?" + parms
+
+	req, err := http.Get(url)
+
+	data, err := io.ReadAll(req.Body)
+	if err != nil {
+		log.Printf(`
+			{
+				"Status" : "Error",
+				"Path to file" : "CCXT_beYANG_Binance/binance/rest",
+				"File": "client.go",
+				"Functions" : "(ex *BinanceRest) withHeader(method string, endpoint string, parms string) ",
+				"Function where err" : "io.ReadAll",
+				"Data": [%v],
+				"Exchange" : "Binance",
+				"Error" : %s
+			}`, req.Body, err)
+		log.Fatal()
 	}
 	return data
 }

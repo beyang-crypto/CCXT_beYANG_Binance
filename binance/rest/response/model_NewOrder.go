@@ -1,28 +1,28 @@
 package response
 
 type NewOrder struct {
-	Symbol              string  `json:"symbol"`
-	OrderID             int     `json:"orderId"`
-	OrderListID         int     `json:"orderListId"`
-	ClientOrderID       string  `json:"clientOrderId"`
-	TransactTime        int64   `json:"transactTime"`
-	Price               string  `json:"price"`
-	OrigQty             string  `json:"origQty"`
-	ExecutedQty         string  `json:"executedQty"`
-	CummulativeQuoteQty string  `json:"cummulativeQuoteQty"`
-	Status              string  `json:"status"`
-	TimeInForce         string  `json:"timeInForce"`
-	Type                string  `json:"type"`
-	Side                string  `json:"side"`
-	StrategyType        int     `json:"strategyType"`
-	Fills               []Fills `json:"fills"`
+	Symbol              string
+	OrderID             int
+	OrderListID         int
+	ClientOrderID       string
+	TransactTime        int64
+	Price               string
+	OrigQty             string
+	ExecutedQty         string
+	CummulativeQuoteQty string
+	Status              string
+	TimeInForce         string
+	Type                string
+	Side                string
+	StrategyType        int
+	Fills               []Fills
 }
 type Fills struct {
-	Price           string `json:"price"`
-	Qty             string `json:"qty"`
-	Commission      string `json:"commission"`
-	CommissionAsset string `json:"commissionAsset"`
-	TradeID         int    `json:"tradeId"`
+	Price           string
+	Qty             string
+	Commission      string
+	CommissionAsset string
+	TradeID         int
 }
 
 func BinanceToNewOrder(data interface{}) (TestNewOrder, bool) {

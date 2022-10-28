@@ -5,10 +5,10 @@ import (
 )
 
 type QueryOrder struct {
-	Symbol            string `json:"symbol"`
-	OrderId           int64  `json:"orderId"`           // optional
-	OrigClientOrderId string `json:"origClientOrderId"` // optional
-	RecvWindow        int64  `json:"recvWindow"`        // optional
+	Symbol            string
+	OrderId           int64  // optional
+	OrigClientOrderId string // optional
+	RecvWindow        int64  // optional
 }
 
 func BinanceParmsToQueryOrder(data interface{}) (TestNewOrder, bool) {

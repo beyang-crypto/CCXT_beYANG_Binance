@@ -5,21 +5,21 @@ import (
 )
 
 type TestNewOrder struct {
-	Symbol           string  `json:"symbol"`
-	Side             string  `json:"side"`
-	Type             string  `json:"type"`
-	TimeInForce      string  `json:"timeInForce"`      // optional
-	Quantity         float64 `json:"quantity"`         // optional
-	QuoteOrderQty    float64 `json:"quoteOrderQty"`    // optional
-	Price            float64 `json:"price"`            // optional
-	NewClientOrderId string  `json:"newClientOrderId"` // optional
-	StrategyId       int64   `json:"strategyId"`       // optional
-	StrategyType     int64   `json:"strategyType"`     // optional
-	StopPrice        float64 `json:"stopPrice"`        // optional
-	TrailingDelta    float64 `json:"trailingDelta"`    // optional
-	IcebergQty       float64 `json:"icebergQty"`       // optional
-	NewOrderRespType string  `json:"newOrderRespType"` // optional
-	RecvWindow       int64   `json:"recvWindow"`       // optional
+	Symbol           string
+	Side             string
+	Type             string
+	TimeInForce      string  // optional
+	Quantity         float64 // optional
+	QuoteOrderQty    float64 // optional
+	Price            float64 // optional
+	NewClientOrderId string  // optional
+	StrategyId       int64   // optional
+	StrategyType     int64   // optional
+	StopPrice        float64 // optional
+	TrailingDelta    float64 // optional
+	IcebergQty       float64 // optional
+	NewOrderRespType string  // optional
+	RecvWindow       int64   // optional
 }
 
 func BinanceParmsToTestNewOrder(data interface{}) (TestNewOrder, bool) {

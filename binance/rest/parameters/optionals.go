@@ -118,3 +118,35 @@ func checkPrice(r float64) string {
 		return ""
 	}
 }
+
+// array stirng
+
+func checkSymbols(s ...string) string {
+	strParm := ""
+	if len(s) > 1 {
+		strParm = "["
+		strParm += `"` + s[0] + `"`
+		for i := 1; i < len(s); i++ {
+			strParm += "," + `"` + s[i] + `"`
+		}
+		strParm += "]"
+		return fmt.Sprintf("symbols=%s", strParm)
+	} else {
+		return ""
+	}
+}
+
+func checkPermissions(p ...string) string {
+	strParm := ""
+	if len(p) > 1 {
+		strParm = "["
+		strParm += `"` + p[0] + `"`
+		for i := 1; i < len(p); i++ {
+			strParm += "," + `"` + p[i] + `"`
+		}
+		strParm += "]"
+		return fmt.Sprintf("permissions=%s", strParm)
+	} else {
+		return ""
+	}
+}
