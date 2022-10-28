@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	binanceWs "github.com/TestingAccMar/CCXT_beYANG_Binance/binance/ws"
+	binanceWs "github.com/beyang-crypto/CCXT_beYANG_Binance/binance/ws"
 )
 
 func main() {

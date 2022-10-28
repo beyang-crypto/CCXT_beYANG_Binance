@@ -1,4 +1,4 @@
-module github.com/TestingAccMar/CCXT_beYANG_Binance
+module github.com/beyang-crypto/CCXT_beYANG_Binance
 
 go 1.18
 
