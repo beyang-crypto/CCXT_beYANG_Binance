@@ -10,7 +10,7 @@ import (
 
 func (ex *BinanceRest) Get(endpoint string, parms interface{}) interface{} {
 
-	parmsForEp := false
+	parmsForEndpoint := false
 	withAuth := false
 	par := ""
 	switch endpoint {
@@ -20,7 +20,7 @@ func (ex *BinanceRest) Get(endpoint string, parms interface{}) interface{} {
 			par = parameters.BinanceParmAccountInformationToString(parm)
 			withAuth = true
 		} else {
-			parmsForEp = true
+			parmsForEndpoint = true
 		}
 	case EndpointAccountTradeList:
 		parm, ok := parameters.BinanceToAccountTradeListParms(parms)
@@ -28,7 +28,7 @@ func (ex *BinanceRest) Get(endpoint string, parms interface{}) interface{} {
 			par = parameters.BinanceParmAccountTradeListToString(parm)
 			withAuth = true
 		} else {
-			parmsForEp = true
+			parmsForEndpoint = true
 		}
 	case EndpointQueryOpenOCO:
 		parm, ok := parameters.BinanceParmsToQueryOpenOCO(parms)
@@ -36,7 +36,15 @@ func (ex *BinanceRest) Get(endpoint string, parms interface{}) interface{} {
 			par = parameters.BinanceParmQueryOpenOCOToString(parm)
 			withAuth = true
 		} else {
-			parmsForEp = true
+			parmsForEndpoint = true
+		}
+	case EndpointExchangeInfo:
+		parm, ok := parameters.BinanceToExchangeInformationParms(parms)
+		if ok {
+			par = parameters.BinanceParmExchangeInformationToString(parm)
+			withAuth = false
+		} else {
+			parmsForEndpoint = true
 		}
 	default:
 		log.Printf(`
@@ -51,7 +59,7 @@ func (ex *BinanceRest) Get(endpoint string, parms interface{}) interface{} {
 		log.Fatal()
 	}
 	// Если параметр не соответствует конечной точке
-	if parmsForEp {
+	if parmsForEndpoint {
 		log.Printf(`
 			{
 				"Status" : "Error",
@@ -74,23 +82,29 @@ func (ex *BinanceRest) Get(endpoint string, parms interface{}) interface{} {
 		if ex.cfg.DebugMode {
 			log.Printf("STATUS: DEBUG\tEXCHANGE: Binance\tAPI: Rest\tMethod: GET\tEndpoint:%s %v", endpoint, string(data))
 		}
+	} else {
+		data = ex.ConnWithoutHeader(endpoint, par)
 	}
 	switch endpoint {
 	case EndpointAccountInformation:
 		var accountInformation response.AccountInformation
 		// не может возвращать ошибку
-		json.Unmarshal(data, accountInformation)
+		json.Unmarshal(data, &accountInformation)
 		returnInterface = accountInformation
 	case EndpointAccountTradeList:
 		var accountTradeList response.AccountTradeList
 		// не может возвращать ошибку
-		json.Unmarshal(data, accountTradeList)
+		json.Unmarshal(data, &accountTradeList)
 		returnInterface = accountTradeList
 	case EndpointQueryOpenOCO:
 		var queryOpenOCO response.QueryOpenOCO
 		// не может возвращать ошибку
-		json.Unmarshal(data, queryOpenOCO)
+		json.Unmarshal(data, &queryOpenOCO)
 		returnInterface = queryOpenOCO
+	case EndpointExchangeInfo:
+		var exchangeInformation response.ExchangeInformation
+		json.Unmarshal(data, &exchangeInformation)
+		returnInterface = exchangeInformation
 	default:
 		log.Fatal()
 	}
@@ -152,4 +166,32 @@ func (ex *BinanceRest) QueryOpenOCO(parm parameters.QueryOpenOCO) response.Query
 		log.Fatal()
 	}
 	return queryOpenOCO
+}
+
+func (ex *BinanceRest) ExchangeInformation(parm parameters.ExchangeInformation) response.ExchangeInformation {
+
+	par := ""
+	par = parameters.BinanceParmExchangeInformationToString(parm)
+	data := ex.ConnWithoutHeader(EndpointExchangeInfo, par)
+	if ex.cfg.DebugMode {
+		log.Printf("STATUS: DEBUG\tEXCHANGE: Binance\tAPI: Rest\tMethod: GET\tEndpoint:%s\tRESPONSE: %v", EndpointExchangeInfo, string(data))
+	}
+	var exchangeInformation response.ExchangeInformation
+
+	if !ex.isErr(data) {
+		_ = json.Unmarshal(data, &exchangeInformation)
+	} else {
+		log.Printf(`
+				{
+					"Status" : "Error",
+					"Path to file" : "CCXT_beYANG_Binance/binance/rest",
+					"File": "get.go",
+					"Functions" : "(ex *BinanceRest) ExchangeInformation(parm parameters.ExchangeInformation) response.ExchangeInformation",
+					"Function where err" : "json.Unmarshal",
+					"Exchange" : "Binance",
+					"Error" : %s
+				}`, string(data))
+		log.Fatal()
+	}
+	return exchangeInformation
 }

@@ -1,23 +1,23 @@
 package response
 
 type AccountInformation struct {
-	MakerCommission  int       `json:"makerCommission"`
-	TakerCommission  int       `json:"takerCommission"`
-	BuyerCommission  int       `json:"buyerCommission"`
-	SellerCommission int       `json:"sellerCommission"`
-	CanTrade         bool      `json:"canTrade"`
-	CanWithdraw      bool      `json:"canWithdraw"`
-	CanDeposit       bool      `json:"canDeposit"`
-	Brokered         bool      `json:"brokered"`
-	UpdateTime       int       `json:"updateTime"`
-	AccountType      string    `json:"accountType"`
-	Balances         []Balance `json:"balances"`
-	Permissions      []string  `json:"permissions"`
+	MakerCommission  int
+	TakerCommission  int
+	BuyerCommission  int
+	SellerCommission int
+	CanTrade         bool
+	CanWithdraw      bool
+	CanDeposit       bool
+	Brokered         bool
+	UpdateTime       int
+	AccountType      string
+	Balances         []Balance
+	Permissions      []string
 }
 type Balance struct {
-	Asset  string `json:"asset"`
-	Free   string `json:"free"`
-	Locked string `json:"locked"`
+	Asset  string
+	Free   string
+	Locked string
 }
 
 func BinanceToAccountInformation(data interface{}) (AccountInformation, bool) {

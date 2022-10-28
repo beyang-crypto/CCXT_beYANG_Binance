@@ -12,40 +12,27 @@ import (
 func main() {
 	cfg := &binanceRest.Configuration{
 		Addr:      binanceRest.BaseEndpoint,
-		ApiKey:    "sJsDdkKA0MrQSethzPEyUTzwL6Ui19CtiqaBGbT8PmTcl5EDeMiY6gMqrANYGADz",
-		SecretKey: "3y1wB3mjJ0Rg8BuAor3nP8SO02oMBeyof6CqotVD2Yd9ARyWaercTBzOOkRM9p0b",
-		DebugMode: false,
+		ApiKey:    "",
+		SecretKey: "",
+		DebugMode: true,
 	}
 
 	b := binanceRest.New(cfg)
-	pair := b.GetPair("btc", "usdt")
-	parm := binanceRestParm.TestNewOrder{
-		Symbol:      pair,
-		Side:        "BUY",
-		Type:        "LIMIT",
-		Quantity:    1,
-		TimeInForce: "GTC",
-		Price:       19158.06,
-		//RecvWindow: 60000,
+	parm1 := binanceRestParm.ExchangeInformation{
+		Permissions: []string{"MARGIN", "LEVERAGED"},
 	}
-	b.TestNewOrder(parm)
+	a := b.ExchangeInformation(parm1)
+
+	log.Printf("%v", a)
 
 	time.Sleep(1 * time.Second)
-	log.Printf("=================================================================================================================================================================================================================================")
+	log.Printf("========================================================================================================================================================================")
 	time.Sleep(1 * time.Second)
 
-	parm = binanceRestParm.TestNewOrder{
-		Symbol:      pair,
-		Side:        "BUY",
-		Type:        "LIMIT",
-		Quantity:    1,
-		TimeInForce: "GTC",
-		Price:       19158.06,
-		RecvWindow:  60000,
-	}
+	parm := binanceRestParm.AccountInformation{}
 
-	i := b.Post(binanceRest.EndpointTestNewOrder, parm)
-	i1, ok := response.BinanceToTestNewOrder(i)
+	i := b.Get(binanceRest.EndpointAccountInformation, parm)
+	i1, ok := response.BinanceToAccountInformation(i)
 	if ok {
 		log.Printf("%v", i1)
 	}

@@ -1,19 +1,19 @@
 package response
 
 type AccountTradeList []struct {
-	Symbol          string `json:"symbol"`
-	ID              int    `json:"id"`
-	OrderID         int    `json:"orderId"`
-	OrderListID     int    `json:"orderListId"`
-	Price           string `json:"price"`
-	Qty             string `json:"qty"`
-	QuoteQty        string `json:"quoteQty"`
-	Commission      string `json:"commission"`
-	CommissionAsset string `json:"commissionAsset"`
-	Time            int64  `json:"time"`
-	IsBuyer         bool   `json:"isBuyer"`
-	IsMaker         bool   `json:"isMaker"`
-	IsBestMatch     bool   `json:"isBestMatch"`
+	Symbol          string
+	ID              int
+	OrderID         int
+	OrderListID     int
+	Price           string
+	Qty             string
+	QuoteQty        string
+	Commission      string
+	CommissionAsset string
+	Time            int64
+	IsBuyer         bool
+	IsMaker         bool
+	IsBestMatch     bool
 }
 
 func BinanceToAccountTradeList(data interface{}) (AccountTradeList, bool) {
