@@ -3,8 +3,8 @@ package rest
 import (
 	"log"
 
-	"github.com/TestingAccMar/CCXT_beYANG_Binance/binance/rest/parameters"
-	"github.com/TestingAccMar/CCXT_beYANG_Binance/binance/rest/response"
+	"github.com/beyang-crypto/CCXT_beYANG_Binance/binance/rest/parameters"
+	"github.com/beyang-crypto/CCXT_beYANG_Binance/binance/rest/response"
 	"github.com/goccy/go-json"
 )
 
@@ -83,7 +83,7 @@ func (ex *BinanceRest) Get(endpoint string, parms interface{}) interface{} {
 			log.Printf("STATUS: DEBUG\tEXCHANGE: Binance\tAPI: Rest\tMethod: GET\tEndpoint:%s %v", endpoint, string(data))
 		}
 	} else {
-		data = ex.ConnWithoutHeader(endpoint, par)
+		data = ex.ConnWithoutHeader("GET", endpoint, par)
 	}
 	switch endpoint {
 	case EndpointAccountInformation:
@@ -172,7 +172,7 @@ func (ex *BinanceRest) ExchangeInformation(parm parameters.ExchangeInformation) 
 
 	par := ""
 	par = parameters.BinanceParmExchangeInformationToString(parm)
-	data := ex.ConnWithoutHeader(EndpointExchangeInfo, par)
+	data := ex.ConnWithoutHeader("GET", EndpointExchangeInfo, par)
 	if ex.cfg.DebugMode {
 		log.Printf("STATUS: DEBUG\tEXCHANGE: Binance\tAPI: Rest\tMethod: GET\tEndpoint:%s\tRESPONSE: %v", EndpointExchangeInfo, string(data))
 	}

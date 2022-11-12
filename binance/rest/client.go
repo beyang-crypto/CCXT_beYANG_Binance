@@ -4,6 +4,7 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -29,6 +30,7 @@ type Configuration struct {
 
 type BinanceRest struct {
 	cfg *Configuration
+	c   *http.Client
 }
 
 type params map[string]interface{}
@@ -41,8 +43,12 @@ func (b *BinanceRest) GetPair(args ...string) string {
 func New(config *Configuration) *BinanceRest {
 
 	// 	потом тут добавятся различные другие настройки
+	client := &http.Client{
+		Timeout: time.Second * 10,
+	}
 	b := &BinanceRest{
 		cfg: config,
+		c:   client,
 	}
 	return b
 }
@@ -59,16 +65,12 @@ func (ex *BinanceRest) GetSign(parm string) string {
 func (ex *BinanceRest) ConnWithHeader(method string, endpoint string, parms string) []byte {
 
 	apiKey := ex.cfg.ApiKey
-	client := &http.Client{
-		Timeout: time.Second * 10,
-	}
-
 	url := ex.cfg.Addr + endpoint + "?" + parms
 
 	req, err := http.NewRequest(method, url, nil)
 
 	req.Header.Set("X-MBX-APIKEY", apiKey)
-	response, err := client.Do(req)
+	response, err := ex.c.Do(req)
 	if err != nil {
 		log.Printf(`
 			{
@@ -99,30 +101,48 @@ func (ex *BinanceRest) ConnWithHeader(method string, endpoint string, parms stri
 		log.Fatal()
 	}
 	if ex.cfg.DebugMode {
-		log.Printf("STATUS: DEBUG\tEXCHANGE: Binance\tAPI: Rest\tBinanceWalletBalance %v", string(data))
+		log.Printf("STATUS: DEBUG\tEXCHANGE: Binance\tAPI: Rest\t %v", string(data))
 	}
 	return data
 }
 
-func (ex *BinanceRest) ConnWithoutHeader(endpoint string, parms string) []byte {
+func (ex *BinanceRest) ConnWithoutHeader(method string, endpoint string, parms string) []byte {
 	url := ex.cfg.Addr + endpoint + "?" + parms
+	fmt.Print(method + " " + url)
 
-	req, err := http.Get(url)
-
-	data, err := io.ReadAll(req.Body)
+	req, err := http.NewRequest(method, url, nil)
+	response, err := ex.c.Do(req)
 	if err != nil {
 		log.Printf(`
 			{
 				"Status" : "Error",
 				"Path to file" : "CCXT_beYANG_Binance/binance/rest",
 				"File": "client.go",
-				"Functions" : "(ex *BinanceRest) withHeader(method string, endpoint string, parms string) ",
+				"Functions" : "(ex *BinanceRest) ConnWithoutHeader(method string, endpoint string, parms string) []byte",
+				"Function where err" : "client.Do",
+				"Data": [%v],
+				"Exchange" : "Binance",
+				"Error" : %s
+			}`, req, err)
+		log.Fatal()
+	}
+	data, err := io.ReadAll(response.Body)
+	if err != nil {
+		log.Printf(`
+			{
+				"Status" : "Error",
+				"Path to file" : "CCXT_beYANG_Binance/binance/rest",
+				"File": "client.go",
+				"Functions" : "(ex *BinanceRest) ConnWithoutHeader(method string, endpoint string, parms string) []byte",
 				"Function where err" : "io.ReadAll",
 				"Data": [%v],
 				"Exchange" : "Binance",
 				"Error" : %s
-			}`, req.Body, err)
+			}`, response.Body, err)
 		log.Fatal()
+	}
+	if ex.cfg.DebugMode {
+		log.Printf("STATUS: DEBUG\tEXCHANGE: Binance\tAPI: Rest\t %v", string(data))
 	}
 	return data
 }

@@ -3,7 +3,7 @@ package parameters
 import "fmt"
 
 type AccountInformation struct {
-	RecvWindow int64
+	RecvWindow int64 // optional
 }
 
 func BinanceParmsToAccountInformation(data interface{}) (AccountInformation, bool) {

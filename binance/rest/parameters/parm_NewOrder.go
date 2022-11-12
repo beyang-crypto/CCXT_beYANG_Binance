@@ -22,12 +22,12 @@ type NewOrder struct {
 	RecvWindow       int64   // optional
 }
 
-func BinanceParmsToNewOrder(data interface{}) (TestNewOrder, bool) {
-	tno, ok := data.(TestNewOrder)
-	return tno, ok
+func BinanceParmsToNewOrder(data interface{}) (NewOrder, bool) {
+	no, ok := data.(NewOrder)
+	return no, ok
 }
 
-func BinanceParmNewOrderToString(parm TestNewOrder) string {
+func BinanceParmNewOrderToString(parm NewOrder) string {
 	par := ""
 	par += checkSymbol(parm.Symbol)
 	par += checkSide(parm.Side)

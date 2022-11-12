@@ -4,11 +4,11 @@ import "fmt"
 
 type AccountTradeList struct {
 	Symbol     string
-	OrderId    int64
-	StartTime  int64
-	EndTime    int64
-	FromId     int64
-	Limit      int64
+	OrderId    int64 // optional
+	StartTime  int64 // optional
+	EndTime    int64 // optional
+	FromId     int64 // optional
+	Limit      int64 // optional
 	RecvWindow int64
 }
 

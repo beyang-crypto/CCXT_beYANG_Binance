@@ -3,7 +3,7 @@ package parameters
 import "fmt"
 
 type QueryOpenOCO struct {
-	RecvWindow int64
+	RecvWindow int64 // optional
 }
 
 func BinanceParmsToQueryOpenOCO(data interface{}) (QueryOpenOCO, bool) {

@@ -3,8 +3,8 @@ package rest
 import (
 	"log"
 
-	"github.com/TestingAccMar/CCXT_beYANG_Binance/binance/rest/parameters"
-	"github.com/TestingAccMar/CCXT_beYANG_Binance/binance/rest/response"
+	"github.com/beyang-crypto/CCXT_beYANG_Binance/binance/rest/parameters"
+	"github.com/beyang-crypto/CCXT_beYANG_Binance/binance/rest/response"
 	"github.com/goccy/go-json"
 )
 
@@ -26,6 +26,14 @@ func (ex *BinanceRest) Post(endpoint string, parms interface{}) interface{} {
 		parm, ok := parameters.BinanceParmsToTestNewOrder(parms)
 		if ok {
 			par = parameters.BinanceParmTestNewOrderToString(parm)
+			withAuth = true
+		} else {
+			parmsForEp = true
+		}
+	case EndpointUserAsset:
+		parm, ok := parameters.BinanceParmsToUserAsset(parms)
+		if ok {
+			par = parameters.BinanceParmUserAssetToString(parm)
 			withAuth = true
 		} else {
 			parmsForEp = true
@@ -106,7 +114,7 @@ func (ex *BinanceRest) TestNewOrder(parm parameters.TestNewOrder) response.TestN
 	return testNewOrder
 }
 
-func (ex *BinanceRest) NewOrder(parm parameters.TestNewOrder) response.NewOrder {
+func (ex *BinanceRest) NewOrder(parm parameters.NewOrder) response.NewOrder {
 	par := ""
 	par = parameters.BinanceParmNewOrderToString(parm)
 	par += "&signature=" + ex.GetSign(par)
@@ -123,7 +131,7 @@ func (ex *BinanceRest) NewOrder(parm parameters.TestNewOrder) response.NewOrder 
 					"Status" : "Error",
 					"Path to file" : "CCXT_beYANG_Binance/binance/rest",
 					"File": "post.go",
-					"Functions" : "(ex *BinanceRest) GetNewOrder(parm parameters.NewOrder) response.NewOrder",
+					"Functions" : "(ex *BinanceRest) NewOrder(parm parameters.NewOrder) response.NewOrder",
 					"Function where err" : "json.Unmarshal",
 					"Exchange" : "Binance",
 					"Error" : %s
@@ -131,4 +139,31 @@ func (ex *BinanceRest) NewOrder(parm parameters.TestNewOrder) response.NewOrder 
 		log.Fatal()
 	}
 	return newOrder
+}
+
+func (ex *BinanceRest) UserAsset(parm parameters.UserAsset) response.UserAsset {
+	par := ""
+	par = parameters.BinanceParmUserAssetToString(parm)
+	par += "&signature=" + ex.GetSign(par)
+	data := ex.ConnWithHeader("POST", EndpointUserAsset, par)
+	var userAsset response.UserAsset
+	if ex.cfg.DebugMode {
+		log.Printf("STATUS: DEBUG\tEXCHANGE: Binance\tAPI: Rest\tMethod: POST\tEndpoint:%s UserAsset  %v", EndpointUserAsset, string(data))
+	}
+	if !ex.isErr(data) {
+		_ = json.Unmarshal(data, &userAsset)
+	} else {
+		log.Printf(`
+				{
+					"Status" : "Error",
+					"Path to file" : "CCXT_beYANG_Binance/binance/rest",
+					"File": "post.go",
+					"Functions" : "(ex *BinanceRest) UserAsset(parm parameters.UserAsset) response.UserAsset",
+					"Function where err" : "json.Unmarshal",
+					"Exchange" : "Binance",
+					"Error" : %s
+				}`, string(data))
+		log.Fatal()
+	}
+	return userAsset
 }

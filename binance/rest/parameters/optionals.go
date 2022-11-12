@@ -4,6 +4,14 @@ import "fmt"
 
 //	string
 
+func checkAsset(s string) string {
+	if s != "" {
+		return fmt.Sprintf("asset=%s&", s)
+	} else {
+		return ""
+	}
+}
+
 func checkSymbol(s string) string {
 	if s != "" {
 		return fmt.Sprintf("symbol=%s&", s)
@@ -114,6 +122,15 @@ func checkQuoteOrderQty(r float64) string {
 func checkPrice(r float64) string {
 	if r != 0 {
 		return fmt.Sprintf("price=%f&", r)
+	} else {
+		return ""
+	}
+}
+
+// bool
+func checkNeedBtcValuation(r bool) string {
+	if r {
+		return fmt.Sprintf("price=%t&", r)
 	} else {
 		return ""
 	}

@@ -1,6 +1,6 @@
 package rest
 
-//Endpoint
+// Endpoint
 const (
 	// https://binance-docs.github.io/apidocs/spot/en/#test-new-order-trade
 	EndpointTestNewOrder = "/api/v3/order/test"
@@ -16,4 +16,6 @@ const (
 	EndpointAccountTradeList = "/api/v3/myTrades"
 	// https://binance-docs.github.io/apidocs/spot/en/#check-server-time
 	EndpointExchangeInfo = "/api/v3/exchangeInfo"
+	// https://binance-docs.github.io/apidocs/spot/en/#user-asset-user_data
+	EndpointUserAsset = "/sapi/v3/asset/getUserAsset"
 )
