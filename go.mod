@@ -1,4 +1,4 @@
-module github.com/TestingAccMar/CCXT_beYANG_Binance
+module github.com/beyang-crypto/CCXT_beYANG_Binance
 
 go 1.18
 
@@ -10,3 +10,5 @@ require (
 	github.com/buger/jsonparser v1.1.1
 	github.com/goccy/go-json v0.9.11
 )
+
+require gopkg.in/yaml.v3 v3.0.1 // indirect

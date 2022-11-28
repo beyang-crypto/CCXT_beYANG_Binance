@@ -64,7 +64,7 @@ func (b *BinanceWS) Subscribe(channel string, coins []string) {
 	b.SendCmd(cmd)
 }
 
-//	отправка команды на сервер в отдельной функции для того, чтобы при переподключении быстро подписаться на все предыдущие каналы
+// отправка команды на сервер в отдельной функции для того, чтобы при переподключении быстро подписаться на все предыдущие каналы
 func (b *BinanceWS) SendCmd(cmd Cmd) {
 	data, err := json.Marshal(cmd)
 	if err != nil {
@@ -252,7 +252,7 @@ func (b *BinanceWS) messageHandler(data []byte) {
 			switch id {
 			case 804218:
 
-			case 804219: //	получение нынешних подписок - использую вместо ping
+			//case 804219: //	получение нынешних подписок - использую вместо ping
 
 			default:
 				log.Printf(`

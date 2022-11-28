@@ -2,38 +2,30 @@ package main
 
 import (
 	"log"
-	"time"
 
-	binanceRest "github.com/TestingAccMar/CCXT_beYANG_Binance/binance/rest"
-	binanceRestParm "github.com/TestingAccMar/CCXT_beYANG_Binance/binance/rest/parameters"
-	"github.com/TestingAccMar/CCXT_beYANG_Binance/binance/rest/response"
+	config "github.com/beyang-crypto/CCXT_beYANG_Binance/binance"
+
+	binanceRest "github.com/beyang-crypto/CCXT_beYANG_Binance/binance/rest"
 )
 
 func main() {
+
+	path := "config-prod.yaml"
+
+	conf := config.GetConfig(path)
+
 	cfg := &binanceRest.Configuration{
 		Addr:      binanceRest.BaseEndpoint,
-		ApiKey:    "",
-		SecretKey: "",
+		ApiKey:    conf.Api.Key,
+		SecretKey: conf.Api.Secret,
 		DebugMode: true,
 	}
 
 	b := binanceRest.New(cfg)
-	parm1 := binanceRestParm.ExchangeInformation{
-		Permissions: []string{"MARGIN", "LEVERAGED"},
-	}
-	a := b.ExchangeInformation(parm1)
 
-	log.Printf("%v", a)
+	parm := binanceRest.AccountInformationParam{}
 
-	time.Sleep(1 * time.Second)
-	log.Printf("========================================================================================================================================================================")
-	time.Sleep(1 * time.Second)
+	resp := b.AccountInformation(parm)
 
-	parm := binanceRestParm.AccountInformation{}
-
-	i := b.Get(binanceRest.EndpointAccountInformation, parm)
-	i1, ok := response.BinanceToAccountInformation(i)
-	if ok {
-		log.Printf("%v", i1)
-	}
+	log.Printf("response %v", resp)
 }

@@ -3,14 +3,20 @@ package main
 import (
 	"log"
 
-	binanceWs "github.com/TestingAccMar/CCXT_beYANG_Binance/binance/ws"
+	config "github.com/beyang-crypto/CCXT_beYANG_Binance/binance"
+	binanceWs "github.com/beyang-crypto/CCXT_beYANG_Binance/binance/ws"
 )
 
 func main() {
+
+	path := "config-prod.yaml"
+
+	conf := config.GetConfig(path)
+
 	cfg := &binanceWs.Configuration{
 		Addr:      binanceWs.HostMainnetPublicTopics,
-		ApiKey:    "",
-		SecretKey: "",
+		ApiKey:    conf.Api.Key,
+		SecretKey: conf.Api.Secret,
 		DebugMode: true,
 	}
 	b := binanceWs.New(cfg)
