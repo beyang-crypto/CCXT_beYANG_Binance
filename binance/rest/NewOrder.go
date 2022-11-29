@@ -54,10 +54,10 @@ type NewOrderResp struct {
 }
 
 func (ex *BinanceRest) NewOrder(parm NewOrderParam) NewOrderResp {
-	r := &request{
+	r := &Request{
 		method:   http.MethodPost,
 		endpoint: EndpointNewOrder,
-		secType:  secTypeSigned,
+		secType:  SecTypeSigned,
 	}
 
 	m := setNewOrder(parm)
@@ -75,8 +75,8 @@ func (ex *BinanceRest) NewOrder(parm NewOrderParam) NewOrderResp {
 	return newOrder
 }
 
-func setNewOrder(parm NewOrderParam) params {
-	m := params{
+func setNewOrder(parm NewOrderParam) Params {
+	m := Params{
 		"symbol":     parm.Symbol,
 		"side":       parm.Side,
 		"type":       parm.Type,

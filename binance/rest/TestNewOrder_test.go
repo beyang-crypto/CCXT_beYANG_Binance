@@ -21,29 +21,35 @@ func TestTestNewOrder(t *testing.T) {
 
 	b := New(cfg)
 
-	t.Run("POST_GTC_SELL_LIMIT", func(t *testing.T) {
+	t.Log("Тестирование TestNewOrder при разных входных данных")
+	{
 		timeInForce := "GTC"
-		quantity := 0.01
-		price := 9000.0
-		newClientOrderId := "my_order_id_1"
+		side := "SELL"
+		t.Logf("\tTimeInForce = %s Side = %s", timeInForce, side)
+		{
+			quantity := 0.01
+			price := 9000.0
+			newClientOrderId := "my_order_id_1"
 
-		parm := TestNewOrderParam{
-			Symbol:           "BTCUSDT",
-			Side:             "SELL",
-			Type:             "LIMIT",
-			TimeInForce:      &timeInForce,
-			Quantity:         &quantity,
-			NewClientOrderId: &newClientOrderId,
-			Price:            &price,
+			parm := TestNewOrderParam{
+				Symbol:           "BTCUSDT",
+				Side:             "SELL",
+				Type:             side,
+				TimeInForce:      &timeInForce,
+				Quantity:         &quantity,
+				NewClientOrderId: &newClientOrderId,
+				Price:            &price,
+			}
+
+			want := TestNewOrderResp{}
+
+			ans := b.TestNewOrder(parm)
+
+			if ans != want {
+				t.Fatalf("TestTestNewOrder got %d, wanted %d", ans, want)
+			}
 		}
 
-		want := TestNewOrderResp{}
-
-		ans := b.TestNewOrder(parm)
-
-		if ans != want {
-			t.Fatalf("TestTestNewOrder got %d, wanted %d", ans, want)
-		}
-	})
+	}
 
 }

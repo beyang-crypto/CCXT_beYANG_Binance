@@ -9,15 +9,15 @@ import (
 type secType int32
 
 const (
-	secTypeNone secType = iota
-	secTypeAPIKey
-	secTypeSigned // if the 'timestamp' parameter is required
+	SecTypeNone secType = iota
+	SecTypeAPIKey
+	SecTypeSigned // if the 'timestamp' parameter is required
 )
 
-type params map[string]interface{}
+type Params map[string]interface{}
 
-// request define an API request
-type request struct {
+// Request define an API Request
+type Request struct {
 	method   string
 	endpoint string
 	query    url.Values
@@ -28,7 +28,7 @@ type request struct {
 }
 
 // setParam set param with key/value to query string
-func (r *request) setParam(key string, value interface{}) *request {
+func (r *Request) setParam(key string, value interface{}) *Request {
 	if r.query == nil {
 		r.query = url.Values{}
 	}
@@ -37,14 +37,14 @@ func (r *request) setParam(key string, value interface{}) *request {
 }
 
 // setParams set params with key/values to query string
-func (r *request) setParams(m params) *request {
+func (r *Request) setParams(m Params) *Request {
 	for k, v := range m {
 		r.setParam(k, v)
 	}
 	return r
 }
 
-func (r *request) validate() (err error) {
+func (r *Request) validate() (err error) {
 	if r.query == nil {
 		r.query = url.Values{}
 	}
@@ -55,11 +55,11 @@ func (r *request) validate() (err error) {
 }
 
 // RequestOption define option type for request
-type RequestOption func(*request)
+type RequestOption func(*Request)
 
 // WithHeader set or add a header value to the request
 func WithHeader(key, value string, replace bool) RequestOption {
-	return func(r *request) {
+	return func(r *Request) {
 		if r.header == nil {
 			r.header = http.Header{}
 		}

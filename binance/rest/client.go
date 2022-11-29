@@ -41,7 +41,7 @@ func (c *BinanceRest) debug(format string, v ...interface{}) {
 	}
 }
 
-func (c *BinanceRest) parseRequest(r *request, opts ...RequestOption) (err error) {
+func (c *BinanceRest) parseRequest(r *Request, opts ...RequestOption) (err error) {
 	err = r.validate()
 	if err != nil {
 		return err
@@ -49,7 +49,7 @@ func (c *BinanceRest) parseRequest(r *request, opts ...RequestOption) (err error
 
 	fullURL := fmt.Sprintf("%s%s", c.cfg.Addr, r.endpoint)
 
-	if r.secType == secTypeSigned {
+	if r.secType == SecTypeSigned {
 		r.setParam("timestamp", time.Now().UTC().Unix()*1000)
 	}
 	queryString := r.query.Encode()
@@ -58,11 +58,11 @@ func (c *BinanceRest) parseRequest(r *request, opts ...RequestOption) (err error
 		header = r.header.Clone()
 	}
 
-	if r.secType == secTypeAPIKey || r.secType == secTypeSigned {
+	if r.secType == SecTypeAPIKey || r.secType == SecTypeSigned {
 		header.Set("X-MBX-APIKEY", c.cfg.ApiKey)
 	}
 
-	if r.secType == secTypeSigned {
+	if r.secType == SecTypeSigned {
 		sign := c.GetSign(queryString)
 
 		v := url.Values{}
@@ -83,7 +83,7 @@ func (c *BinanceRest) parseRequest(r *request, opts ...RequestOption) (err error
 	return nil
 }
 
-func (c *BinanceRest) callAPI(r *request, opts ...RequestOption) (data []byte, err error) {
+func (c *BinanceRest) callAPI(r *Request, opts ...RequestOption) (data []byte, err error) {
 	err = c.parseRequest(r, opts...)
 	if err != nil {
 		return []byte{}, err

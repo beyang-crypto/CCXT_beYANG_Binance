@@ -8,7 +8,6 @@ import (
 )
 
 const (
-
 	// https://binance-docs.github.io/apidocs/spot/en/#account-information-user_data
 	EndpointAccountInformation = "/api/v3/account"
 )
@@ -37,10 +36,10 @@ type AccountInformationResp struct {
 }
 
 func (ex *BinanceRest) AccountInformation(parm AccountInformationParam) AccountInformationResp {
-	r := &request{
+	r := &Request{
 		method:   http.MethodGet,
 		endpoint: EndpointAccountInformation,
-		secType:  secTypeSigned,
+		secType:  SecTypeSigned,
 	}
 	m := setAccountInformationParams(parm)
 	r.setParams(m)
@@ -55,8 +54,8 @@ func (ex *BinanceRest) AccountInformation(parm AccountInformationParam) AccountI
 	return accountInformation
 }
 
-func setAccountInformationParams(parm AccountInformationParam) params {
-	m := params{
+func setAccountInformationParams(parm AccountInformationParam) Params {
+	m := Params{
 		"recvWindow": parm.RecvWindow,
 	}
 	return m

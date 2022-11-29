@@ -32,10 +32,10 @@ type TestNewOrderResp struct {
 }
 
 func (ex *BinanceRest) TestNewOrder(parm TestNewOrderParam) TestNewOrderResp {
-	r := &request{
+	r := &Request{
 		method:   http.MethodPost,
 		endpoint: EndpointTestNewOrder,
-		secType:  secTypeSigned,
+		secType:  SecTypeSigned,
 	}
 	m := setTestNewOrderParams(parm)
 	r.setParams(m)
@@ -50,8 +50,8 @@ func (ex *BinanceRest) TestNewOrder(parm TestNewOrderParam) TestNewOrderResp {
 	return testNewOrder
 }
 
-func setTestNewOrderParams(parm TestNewOrderParam) params {
-	m := params{
+func setTestNewOrderParams(parm TestNewOrderParam) Params {
+	m := Params{
 		"symbol":     parm.Symbol,
 		"side":       parm.Side,
 		"type":       parm.Type,

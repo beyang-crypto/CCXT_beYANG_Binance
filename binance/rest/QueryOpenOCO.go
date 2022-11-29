@@ -32,10 +32,10 @@ type QueryOpenOCOResp []struct {
 }
 
 func (ex *BinanceRest) QueryOpenOCO(parm QueryOpenOCOParam) QueryOpenOCOResp {
-	r := &request{
+	r := &Request{
 		method:   http.MethodGet,
 		endpoint: EndpointUserAsset,
-		secType:  secTypeSigned,
+		secType:  SecTypeSigned,
 	}
 
 	m := setQueryOpenOCOParams(parm)
@@ -51,8 +51,8 @@ func (ex *BinanceRest) QueryOpenOCO(parm QueryOpenOCOParam) QueryOpenOCOResp {
 	return queryOpenOCO
 }
 
-func setQueryOpenOCOParams(parm QueryOpenOCOParam) params {
-	m := params{
+func setQueryOpenOCOParams(parm QueryOpenOCOParam) Params {
+	m := Params{
 		"recvWindow": parm.RecvWindow,
 	}
 	return m

@@ -29,10 +29,10 @@ type UserAssetResp struct {
 }
 
 func (ex *BinanceRest) UserAsset(parm UserAssetParam) UserAssetResp {
-	r := &request{
+	r := &Request{
 		method:   http.MethodPost,
 		endpoint: EndpointUserAsset,
-		secType:  secTypeAPIKey,
+		secType:  SecTypeAPIKey,
 	}
 
 	m := setUserAssetParams(parm)
@@ -48,8 +48,8 @@ func (ex *BinanceRest) UserAsset(parm UserAssetParam) UserAssetResp {
 	return userAsset
 }
 
-func setUserAssetParams(parm UserAssetParam) params {
-	m := params{}
+func setUserAssetParams(parm UserAssetParam) Params {
+	m := Params{}
 	if parm.Asset != nil {
 		m["asset"] = *&parm.Asset
 	}
