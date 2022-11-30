@@ -16,15 +16,16 @@ func TestTestNewOrder(t *testing.T) {
 		Addr:      BaseEndpoint,
 		ApiKey:    conf.Api.Key,
 		SecretKey: conf.Api.Secret,
-		DebugMode: false,
+		DebugMode: true,
 	}
 
 	b := New(cfg)
 
 	t.Log("Тестирование TestNewOrder при разных входных данных")
 	{
-		timeInForce := "GTC"
-		side := "SELL"
+		timeInForce := TimeInForceGTC
+		side := OrderSideBUY
+		orderType := OrderTypeLimit
 		t.Logf("\tTimeInForce = %s Side = %s", timeInForce, side)
 		{
 			quantity := 0.01
@@ -33,8 +34,8 @@ func TestTestNewOrder(t *testing.T) {
 
 			parm := TestNewOrderParam{
 				Symbol:           "BTCUSDT",
-				Side:             "SELL",
-				Type:             side,
+				Side:             side,
+				Type:             orderType,
 				TimeInForce:      &timeInForce,
 				Quantity:         &quantity,
 				NewClientOrderId: &newClientOrderId,

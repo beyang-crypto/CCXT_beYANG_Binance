@@ -101,7 +101,7 @@ func (ex *BinanceRest) ExchangeInformation(parm ExchangeInformationParam) Exchan
 	r := &Request{
 		method:   http.MethodGet,
 		endpoint: EndpointExchangeInfo,
-		secType:  SecTypeNone,
+		secType:  secTypeNone,
 	}
 
 	m := setExchangeInformationParams(parm)
@@ -116,8 +116,8 @@ func (ex *BinanceRest) ExchangeInformation(parm ExchangeInformationParam) Exchan
 	return exchangeInformation
 }
 
-func setExchangeInformationParams(parm ExchangeInformationParam) Params {
-	var m Params
+func setExchangeInformationParams(parm ExchangeInformationParam) params {
+	var m params
 	if parm.Symbol != nil {
 		m["symbol"] = *parm.Symbol
 	}

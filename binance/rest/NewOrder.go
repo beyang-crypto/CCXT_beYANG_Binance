@@ -13,20 +13,20 @@ const (
 
 type NewOrderParam struct {
 	Symbol           string
-	Side             string
-	Type             string
-	TimeInForce      *string  // optional
-	Quantity         *float64 // optional
-	QuoteOrderQty    *float64 // optional
-	Price            *float64 // optional
-	NewClientOrderId *string  // optional
-	StrategyId       *int64   // optional
-	StrategyType     *int64   // optional
-	StopPrice        *float64 // optional
-	TrailingDelta    *float64 // optional
-	IcebergQty       *float64 // optional
-	NewOrderRespType *string  // optional
-	RecvWindow       *int64   // optional
+	Side             OrderSideType
+	Type             OrderType
+	TimeInForce      *TimeInForceType  // optional
+	Quantity         *float64          // optional
+	QuoteOrderQty    *float64          // optional
+	Price            *float64          // optional
+	NewClientOrderId *string           // optional
+	StrategyId       *int64            // optional
+	StrategyType     *int64            // optional
+	StopPrice        *float64          // optional
+	TrailingDelta    *float64          // optional
+	IcebergQty       *float64          // optional
+	NewOrderRespType *NewOrderRespType // optional
+	RecvWindow       *int64            // optional
 }
 
 type NewOrderResp struct {
@@ -50,17 +50,17 @@ type NewOrderResp struct {
 		Commission      string
 		CommissionAsset string
 		TradeID         int
-	}
+	} `json:"fills"`
 }
 
 func (ex *BinanceRest) NewOrder(parm NewOrderParam) NewOrderResp {
 	r := &Request{
 		method:   http.MethodPost,
 		endpoint: EndpointNewOrder,
-		secType:  SecTypeSigned,
+		secType:  secTypeSigned,
 	}
 
-	m := setNewOrder(parm)
+	m := setNewOrderParams(parm)
 
 	r.setParams(m)
 
@@ -75,12 +75,11 @@ func (ex *BinanceRest) NewOrder(parm NewOrderParam) NewOrderResp {
 	return newOrder
 }
 
-func setNewOrder(parm NewOrderParam) Params {
-	m := Params{
-		"symbol":     parm.Symbol,
-		"side":       parm.Side,
-		"type":       parm.Type,
-		"recvWindow": parm.RecvWindow,
+func setNewOrderParams(parm NewOrderParam) params {
+	m := params{
+		"symbol": parm.Symbol,
+		"side":   parm.Side,
+		"type":   parm.Type,
 	}
 	if parm.Quantity != nil {
 		m["quantity"] = *parm.Quantity
@@ -108,6 +107,9 @@ func setNewOrder(parm NewOrderParam) Params {
 	}
 	if parm.NewOrderRespType != nil {
 		m["newOrderRespType"] = *parm.NewOrderRespType
+	}
+	if parm.RecvWindow != nil {
+		m["recvWindow"] = *&parm.RecvWindow
 	}
 	return m
 }

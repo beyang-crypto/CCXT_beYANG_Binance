@@ -44,7 +44,7 @@ func (ex *BinanceRest) QueryOrder(parm QueryOrderParam) QueryOrderResp {
 	r := &Request{
 		method:   http.MethodGet,
 		endpoint: EndpointQueryOrder,
-		secType:  SecTypeSigned,
+		secType:  secTypeSigned,
 	}
 
 	m := setQueryOrderParams(parm)
@@ -60,8 +60,8 @@ func (ex *BinanceRest) QueryOrder(parm QueryOrderParam) QueryOrderResp {
 	return queryOrder
 }
 
-func setQueryOrderParams(parm QueryOrderParam) Params {
-	m := Params{
+func setQueryOrderParams(parm QueryOrderParam) params {
+	m := params{
 		"symbol": parm.Symbol,
 	}
 	if parm.OrderId != nil {

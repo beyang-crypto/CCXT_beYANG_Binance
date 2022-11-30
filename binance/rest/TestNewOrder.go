@@ -12,20 +12,20 @@ const EndpointTestNewOrder = "/api/v3/order/test"
 
 type TestNewOrderParam struct {
 	Symbol           string
-	Side             string
-	Type             string
-	TimeInForce      *string  // optional
-	Quantity         *float64 // optional
-	QuoteOrderQty    *float64 // optional
-	Price            *float64 // optional
-	NewClientOrderId *string  // optional
-	StrategyId       *int64   // optional
-	StrategyType     *int64   // optional
-	StopPrice        *float64 // optional
-	TrailingDelta    *float64 // optional
-	IcebergQty       *float64 // optional
-	NewOrderRespType *string  // optional
-	RecvWindow       *int64   // optional
+	Side             OrderSideType
+	Type             OrderType
+	TimeInForce      *TimeInForceType  // optional
+	Quantity         *float64          // optional
+	QuoteOrderQty    *float64          // optional
+	Price            *float64          // optional
+	NewClientOrderId *string           // optional
+	StrategyId       *int64            // optional
+	StrategyType     *int64            // optional
+	StopPrice        *float64          // optional
+	TrailingDelta    *float64          // optional
+	IcebergQty       *float64          // optional
+	NewOrderRespType *NewOrderRespType // optional
+	RecvWindow       *int64            // optional
 }
 
 type TestNewOrderResp struct {
@@ -35,7 +35,7 @@ func (ex *BinanceRest) TestNewOrder(parm TestNewOrderParam) TestNewOrderResp {
 	r := &Request{
 		method:   http.MethodPost,
 		endpoint: EndpointTestNewOrder,
-		secType:  SecTypeSigned,
+		secType:  secTypeSigned,
 	}
 	m := setTestNewOrderParams(parm)
 	r.setParams(m)
@@ -50,12 +50,11 @@ func (ex *BinanceRest) TestNewOrder(parm TestNewOrderParam) TestNewOrderResp {
 	return testNewOrder
 }
 
-func setTestNewOrderParams(parm TestNewOrderParam) Params {
-	m := Params{
-		"symbol":     parm.Symbol,
-		"side":       parm.Side,
-		"type":       parm.Type,
-		"recvWindow": parm.RecvWindow,
+func setTestNewOrderParams(parm TestNewOrderParam) params {
+	m := params{
+		"symbol": parm.Symbol,
+		"side":   parm.Side,
+		"type":   parm.Type,
 	}
 	if parm.Quantity != nil {
 		m["quantity"] = *parm.Quantity
@@ -83,6 +82,9 @@ func setTestNewOrderParams(parm TestNewOrderParam) Params {
 	}
 	if parm.NewOrderRespType != nil {
 		m["newOrderRespType"] = *parm.NewOrderRespType
+	}
+	if parm.RecvWindow != nil {
+		m["recvWindow"] = *&parm.RecvWindow
 	}
 	return m
 }

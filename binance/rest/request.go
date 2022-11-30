@@ -9,12 +9,12 @@ import (
 type secType int32
 
 const (
-	SecTypeNone secType = iota
-	SecTypeAPIKey
-	SecTypeSigned // if the 'timestamp' parameter is required
+	secTypeNone secType = iota
+	secTypeAPIKey
+	secTypeSigned // if the 'timestamp' parameter is required
 )
 
-type Params map[string]interface{}
+type params map[string]interface{}
 
 // Request define an API Request
 type Request struct {
@@ -37,7 +37,7 @@ func (r *Request) setParam(key string, value interface{}) *Request {
 }
 
 // setParams set params with key/values to query string
-func (r *Request) setParams(m Params) *Request {
+func (r *Request) setParams(m params) *Request {
 	for k, v := range m {
 		r.setParam(k, v)
 	}

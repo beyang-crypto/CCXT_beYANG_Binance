@@ -42,7 +42,7 @@ func (ex *BinanceRest) AccountTradeList(parm AccountTradeListParam) AccountTrade
 	r := &Request{
 		method:   http.MethodGet,
 		endpoint: EndpointAccountTradeList,
-		secType:  SecTypeSigned,
+		secType:  secTypeSigned,
 	}
 
 	m := setAccountTradeListParams(parm)
@@ -59,8 +59,8 @@ func (ex *BinanceRest) AccountTradeList(parm AccountTradeListParam) AccountTrade
 	return accountTradeList
 }
 
-func setAccountTradeListParams(parm AccountTradeListParam) Params {
-	m := Params{
+func setAccountTradeListParams(parm AccountTradeListParam) params {
+	m := params{
 		"symbol": parm.Symbol,
 	}
 	if parm.OrderId != nil {

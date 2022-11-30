@@ -39,7 +39,7 @@ func (ex *BinanceRest) AccountInformation(parm AccountInformationParam) AccountI
 	r := &Request{
 		method:   http.MethodGet,
 		endpoint: EndpointAccountInformation,
-		secType:  SecTypeSigned,
+		secType:  secTypeSigned,
 	}
 	m := setAccountInformationParams(parm)
 	r.setParams(m)
@@ -54,8 +54,8 @@ func (ex *BinanceRest) AccountInformation(parm AccountInformationParam) AccountI
 	return accountInformation
 }
 
-func setAccountInformationParams(parm AccountInformationParam) Params {
-	m := Params{
+func setAccountInformationParams(parm AccountInformationParam) params {
+	m := params{
 		"recvWindow": parm.RecvWindow,
 	}
 	return m
