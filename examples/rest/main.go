@@ -22,10 +22,12 @@ func main() {
 	}
 
 	b := binanceRest.New(cfg)
+	symbol := b.GetPair("btc", "usdt")
+	parm := binanceRest.MarginAccountPriceIndexParam{
+		Symbol: symbol,
+	}
 
-	parm := binanceRest.AccountInformationParam{}
-
-	resp := b.AccountInformation(parm)
+	resp := b.MarginAccountPriceIndex(parm)
 
 	log.Printf("response %v", resp)
 }

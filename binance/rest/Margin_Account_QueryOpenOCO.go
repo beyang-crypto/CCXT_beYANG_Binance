@@ -37,7 +37,7 @@ type MarginQueryOpenOCOResp []struct {
 func (ex *BinanceRest) MarginQueryOpenOCO(parm MarginQueryOpenOCOParam) MarginQueryOpenOCOResp {
 	r := &Request{
 		method:   http.MethodGet,
-		endpoint: EndpointUserAsset,
+		endpoint: EndpointMarginQueryOpenOCO,
 		secType:  secTypeSigned,
 	}
 
