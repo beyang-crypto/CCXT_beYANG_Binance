@@ -52,8 +52,9 @@ func (ex *BinanceRest) QueryOpenOCO(parm QueryOpenOCOParam) QueryOpenOCOResp {
 }
 
 func setQueryOpenOCOParams(parm QueryOpenOCOParam) params {
-	m := params{
-		"recvWindow": parm.RecvWindow,
+	m := params{}
+	if parm.RecvWindow != nil {
+		m["recvWindow"] = *&parm.RecvWindow
 	}
 	return m
 }
