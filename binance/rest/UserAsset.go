@@ -40,7 +40,17 @@ func (ex *BinanceRest) UserAsset(parm UserAssetParam) UserAssetResp {
 
 	data, err := ex.callAPI(r)
 	if err != nil {
-		log.Printf("%v", err)
+		log.Printf(`
+ 				{
+ 					"Status" : "Error",
+ 					"Path to file" : "CCXT_beYANG_Binance/binance/rest",
+ 					"File": "UserAsset.go",
+ 					"Functions" : "(ex *BinanceRest) UserAsset(parm UserAssetParam) UserAssetResp",
+ 					"Function where err" : "ex.callAPI",
+ 					"Exchange" : "Binance",
+ 					"Error" : %s
+ 				}`, err)
+		log.Fatal()
 	}
 
 	var userAsset UserAssetResp

@@ -52,7 +52,17 @@ func (ex *BinanceRest) QueryOrder(parm QueryOrderParam) QueryOrderResp {
 
 	data, err := ex.callAPI(r)
 	if err != nil {
-		log.Printf("%v", err)
+		log.Printf(`
+ 				{
+ 					"Status" : "Error",
+ 					"Path to file" : "CCXT_beYANG_Binance/binance/rest",
+ 					"File": "QueryOrder.go",
+ 					"Functions" : "(ex *BinanceRest) QueryOrder(parm QueryOrderParam) QueryOrderResp",
+ 					"Function where err" : "ex.callAPI",
+ 					"Exchange" : "Binance",
+ 					"Error" : %s
+ 				}`, err)
+		log.Fatal()
 	}
 
 	var queryOrder QueryOrderResp

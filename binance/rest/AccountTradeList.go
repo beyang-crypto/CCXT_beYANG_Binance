@@ -51,7 +51,17 @@ func (ex *BinanceRest) AccountTradeList(parm AccountTradeListParam) AccountTrade
 	data, err := ex.callAPI(r)
 
 	if err != nil {
-		log.Printf("%v", err)
+		log.Printf(`
+ 				{
+ 					"Status" : "Error",
+ 					"Path to file" : "CCXT_beYANG_Binance/binance/rest",
+ 					"File": "AccountTradeList.go",
+ 					"Functions" : "(ex *BinanceRest) AccountTradeList(parm AccountTradeListParam) AccountTradeListResp",
+ 					"Function where err" : "ex.callAPI",
+ 					"Exchange" : "Binance",
+ 					"Error" : %s
+ 				}`, err)
+		log.Fatal()
 	}
 
 	var accountTradeList AccountTradeListResp

@@ -34,7 +34,7 @@ type QueryOpenOCOResp []struct {
 func (ex *BinanceRest) QueryOpenOCO(parm QueryOpenOCOParam) QueryOpenOCOResp {
 	r := &Request{
 		method:   http.MethodGet,
-		endpoint: EndpointUserAsset,
+		endpoint: EndpointQueryOpenOCO,
 		secType:  secTypeSigned,
 	}
 
@@ -43,7 +43,17 @@ func (ex *BinanceRest) QueryOpenOCO(parm QueryOpenOCOParam) QueryOpenOCOResp {
 
 	data, err := ex.callAPI(r)
 	if err != nil {
-		log.Printf("%v", err)
+		log.Printf(`
+ 				{
+ 					"Status" : "Error",
+ 					"Path to file" : "CCXT_beYANG_Binance/binance/rest",
+ 					"File": "QueryOpenOCO.go",
+ 					"Functions" : "(ex *BinanceRest) QueryOpenOCO(parm QueryOpenOCOParam) QueryOpenOCOResp",
+ 					"Function where err" : "ex.callAPI",
+ 					"Exchange" : "Binance",
+ 					"Error" : %s
+ 				}`, err)
+		log.Fatal()
 	}
 
 	var queryOpenOCO QueryOpenOCOResp

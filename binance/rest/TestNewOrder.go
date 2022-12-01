@@ -43,7 +43,17 @@ func (ex *BinanceRest) TestNewOrder(parm TestNewOrderParam) TestNewOrderResp {
 	data, err := ex.callAPI(r)
 
 	if err != nil {
-		log.Printf("%v", err)
+		log.Printf(`
+ 				{
+ 					"Status" : "Error",
+ 					"Path to file" : "CCXT_beYANG_Binance/binance/rest",
+ 					"File": "TestNewOrder.go",
+ 					"Functions" : "(ex *BinanceRest) TestNewOrder(parm TestNewOrderParam) TestNewOrderResp",
+ 					"Function where err" : "ex.callAPI",
+ 					"Exchange" : "Binance",
+ 					"Error" : %s
+ 				}`, err)
+		log.Fatal()
 	}
 	var testNewOrder TestNewOrderResp
 	_ = json.Unmarshal(data, &testNewOrder)

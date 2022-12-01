@@ -65,7 +65,17 @@ func (ex *BinanceRest) MarginAccountNewOrder(parm MarginAccountNewOrderParam) Ma
 	data, err := ex.callAPI(r)
 
 	if err != nil {
-		log.Printf("%v", err)
+		log.Printf(`
+ 				{
+ 					"Status" : "Error",
+ 					"Path to file" : "CCXT_beYANG_Binance/binance/rest",
+ 					"File": "MarginAccountNewOrder.go",
+ 					"Functions" : "(ex *BinanceRest) MarginAccountNewOrder(parm MarginAccountNewOrderParam) MarginAccountNewOrderResp",
+ 					"Function where err" : "ex.callAPI",
+ 					"Exchange" : "Binance",
+ 					"Error" : %s
+ 				}`, err)
+		log.Fatal()
 	}
 
 	var marginAccountNewOrder MarginAccountNewOrderResp
