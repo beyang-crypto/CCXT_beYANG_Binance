@@ -38,10 +38,10 @@ func main() {
 	// pair14 := b.GetPair("link", "usdt")
 	// pair15 := b.GetPair("atom", "usdt")
 
-	b.Subscribe(binanceWs.ChannelTicker, []string{pair1})
+	klineStream := b.GetKlineStreamName(binanceWs.KlineInterval5minutes)
+	b.Subscribe(klineStream, []string{pair1})
 
-	b.On(binanceWs.ChannelTicker, handleBookTicker)
-	b.On(binanceWs.ChannelTicker, handleBestBidPrice)
+	b.On(binanceWs.ChannelKline, handleBookTicker)
 
 	// cfgRest := &binanceRest.Configuration{
 	// 	Addr:      binanceRest.RestBaseEndpoint,
@@ -64,6 +64,10 @@ func main() {
 }
 
 func handleBookTicker(name string, symbol string, data binanceWs.BookTicker) {
+	log.Printf("%s Ticker  %s: %v", name, symbol, data)
+}
+
+func handleKline(name string, symbol string, data binanceWs.Kline) {
 	log.Printf("%s Ticker  %s: %v", name, symbol, data)
 }
 

@@ -47,6 +47,10 @@ func New(config *Configuration) *BinanceWS {
 	return b
 }
 
+func (b *BinanceWS) GetKlineStreamName(interval string) string {
+	return ChannelKline + interval
+}
+
 func (b *BinanceWS) Subscribe(channel string, coins []string) {
 	var parms []string
 	for _, value := range coins {
@@ -221,11 +225,29 @@ func (b *BinanceWS) messageHandler(data []byte) {
 	if b.cfg.DebugMode {
 		log.Printf("STATUS: DEBUG\tEXCHANGE: Binance\tAPI: WS\tBinanceWs %v", string(data))
 	}
-
 	//	в ошибке нет необходимости, т.к. она выходит каждый раз, когда не найдет элемент
 	eventType, _ := jsonparser.GetString(data, "e")
 
 	switch eventType {
+	case "kline":
+		var kline Kline
+		err := json.Unmarshal(data, &kline)
+		if err != nil {
+			log.Printf(`
+					{
+						"Status" : "Error",
+						"Path to file" : "CCXT_BEYANG_BINANCE/binance/ws/",
+						"File": "client.go",
+						"Functions" : "(b *BinanceWS) messageHandler(data []byte)",
+						"Function where err" : "json.Unmarshal",
+						"Exchange" : "Binance",
+						"Comment" : %s to Kline struct,
+						"Error" : %s
+					}`, string(data), err)
+			log.Fatal()
+		}
+		b.processKline("Binance", kline.S, kline)
+		break
 	//	принимаемые запросы от тикера и от подписок не имеют eventType, однако все остальные имеют
 	default:
 		u, _ := jsonparser.GetInt(data, "u")
@@ -236,7 +258,7 @@ func (b *BinanceWS) messageHandler(data []byte) {
 				log.Printf(`
 					{
 						"Status" : "Error",
-						"Path to file" : "CCXT_BEYANG_BINANCE/binance",
+						"Path to file" : "CCXT_BEYANG_BINANCE/binance/ws/",
 						"File": "client.go",
 						"Functions" : "(b *BinanceWS) messageHandler(data []byte)",
 						"Function where err" : "json.Unmarshal",
